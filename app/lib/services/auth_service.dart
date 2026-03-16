@@ -38,13 +38,41 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   //! Register
   static Future<String> register({
+  //! Extract readable error
+  static String _extractError(http.Response response) {
+    try {
+      final data = jsonDecode(response.body);
+
+      if (data is Map && data.containsKey('message')) {
+        return data['message'];
+      }
+
+      return "Something went wrong";
+    } catch (e) {
+      return "Server error (${response.statusCode})";
+    }
+  }
+
+  //! Register
+  static Future<String> register({
     required String serviceId,
     required String mobileNumber,
     required String password,
   }) async {
     try {
       final uri = Uri.parse('$_baseUrl/auth/reg');
+    try {
+      final uri = Uri.parse('$_baseUrl/auth/reg');
 
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'serviceId': serviceId,
+          'mobileNumber': mobileNumber,
+          'password': password,
+        }),
+      );
       final response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
@@ -62,9 +90,18 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
       }
     } catch (e) {
       throw Exception("Unable to connect to server");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return "Account created successfully";
+      } else {
+        throw Exception(_extractError(response));
+      }
+    } catch (e) {
+      throw Exception("Unable to connect to server");
     }
   }
 
+  //! Login
+  static Future<String> login({
   //! Login
   static Future<String> login({
     required String serviceId,
@@ -72,7 +109,17 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
   }) async {
     try {
       final uri = Uri.parse('$_baseUrl/auth/login');
+    try {
+      final uri = Uri.parse('$_baseUrl/auth/login');
 
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'serviceId': serviceId,
+          'password': password,
+        }),
+      );
       final response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
@@ -85,7 +132,13 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
       if (response.statusCode != 200) {
         throw Exception(_extractError(response));
       }
+      if (response.statusCode != 200) {
+        throw Exception(_extractError(response));
+      }
 
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      final token = data['token'];
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       final token = data['token'];
@@ -93,7 +146,16 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
       if (token == null || token.isEmpty) {
         throw Exception("Login failed. No token received.");
       }
+      if (token == null || token.isEmpty) {
+        throw Exception("Login failed. No token received.");
+      }
 
+      await _saveToken(token);
+
+      return "Login successful";
+    } catch (e) {
+      rethrow;
+    }
       await _saveToken(token);
 
       return "Login successful";
@@ -109,6 +171,7 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
 
     final uri = Uri.parse('$_baseUrl/auth/me');
 
+
     final response = await http.get(
       uri,
       headers: {
@@ -121,6 +184,7 @@ static final FlutterSecureStorage _storage = FlutterSecureStorage();
       return null;
     }
 
+    return jsonDecode(response.body);
     return jsonDecode(response.body);
   }
 }
