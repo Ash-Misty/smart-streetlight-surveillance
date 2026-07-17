@@ -58,11 +58,18 @@ class _LoginPageState extends State<LoginPage> {
 
       if (!mounted) return;
 
+      // Show success message
       showToast(message);
 
+      // Wait for 3 seconds before navigating
+      await Future.delayed(const Duration(seconds: 3));
+
+      if (!mounted) return;
+
+      // Navigate to dashboard after 3 seconds
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  DashboardPage()),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
     } catch (e) {
       if (!mounted) return;
@@ -176,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text(
-                                "Don’t have Account ? ",
+                                "Don't have Account ? ",
                                 style: TextStyle(color: Colors.white70),
                               ),
                               GestureDetector(

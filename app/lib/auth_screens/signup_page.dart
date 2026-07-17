@@ -49,11 +49,20 @@ class _SignupPageState extends State<SignupPage> {
 
       if (!mounted) return;
 
+      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signup successful, please login')),
+        const SnackBar(
+          content: Text('Signup successful, please login'),
+          duration: Duration(seconds: 3), // Show for exactly 3 seconds
+        ),
       );
 
+      // Navigate back after 3 seconds
+      await Future.delayed(const Duration(seconds: 3));
+      
+      if (!mounted) return;
       Navigator.pop(context);
+      
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
