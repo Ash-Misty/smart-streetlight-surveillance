@@ -29,8 +29,273 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
+  void showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.green.withOpacity(0.3),
+                  blurRadius: 20,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Success!",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.red.withOpacity(0.3),
+                  blurRadius: 20,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Error!",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Try Again",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showValidationErrorDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.orange.withOpacity(0.3),
+                  blurRadius: 20,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.orange,
+                    size: 40,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Validation Error!",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _handleSignup() async {
-    if (!_formKey.currentState!.validate()) return;
+    // First validate form fields
+    if (!_formKey.currentState!.validate()) {
+      // Show error dialog for empty or invalid fields
+      showValidationErrorDialog(
+        "Please fill all fields correctly before signing up"
+      );
+      return;
+    }
 
     final serviceId = _serviceIdController.text.trim();
     final mobile = _mobileController.text.trim();
@@ -49,24 +314,26 @@ class _SignupPageState extends State<SignupPage> {
 
       if (!mounted) return;
 
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Signup successful, please login'),
-          duration: Duration(seconds: 3), // Show for exactly 3 seconds
-        ),
-      );
+      // Show success dialog
+      showSuccessDialog('Your account has been created successfully!');
 
-      // Navigate back after 3 seconds
-      await Future.delayed(const Duration(seconds: 3));
+      // Wait for user to tap OK or close dialog
+      await Future.delayed(const Duration(seconds: 2));
       
       if (!mounted) return;
       Navigator.pop(context);
       
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+      
+      String errorMessage = e.toString().replaceAll("Exception:", "").trim();
+      
+      // Better error message formatting
+      if (errorMessage.isEmpty) {
+        errorMessage = "Signup failed. Please try again.";
+      }
+
+      showErrorDialog(errorMessage);
     } finally {
       if (mounted) {
         setState(() {
@@ -159,7 +426,13 @@ class _SignupPageState extends State<SignupPage> {
                             icon: Icons.person_outline,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return "Service ID is required";
+                                return "⚠️ Service ID is required";
+                              }
+                              if (value.trim().length < 3) {
+                                return "⚠️ Service ID must be at least 3 characters";
+                              }
+                              if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value.trim())) {
+                                return "⚠️ Only letters, numbers, and underscores allowed";
                               }
                               return null;
                             },
@@ -174,10 +447,15 @@ class _SignupPageState extends State<SignupPage> {
                             keyboardType: TextInputType.phone,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Mobile number is required";
+                                return "⚠️ Mobile number is required";
                               }
-                              if (value.length != 10) {
-                                return "Enter a valid 10-digit mobile number";
+                              // Remove any non-digit characters for validation
+                              final cleanNumber = value.replaceAll(RegExp(r'\D'), '');
+                              if (cleanNumber.length != 10) {
+                                return "⚠️ Enter a valid 10-digit mobile number";
+                              }
+                              if (!RegExp(r'^[6-9]\d{9}$').hasMatch(cleanNumber)) {
+                                return "⚠️ Mobile number must start with 6,7,8, or 9";
                               }
                               return null;
                             },
@@ -187,7 +465,24 @@ class _SignupPageState extends State<SignupPage> {
 
                           _passwordField(),
 
-                          const SizedBox(height: 35),
+                          const SizedBox(height: 10),
+                          
+                          // Show hint text for password requirements
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "Password must be at least 6 characters",
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 25),
 
                           GestureDetector(
                             onTap: _isLoading ? null : _handleSignup,
@@ -202,7 +497,7 @@ class _SignupPageState extends State<SignupPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text(
-                                "Already have account ? ",
+                                "Already have account? ",
                                 style: TextStyle(color: Colors.white70),
                               ),
                               GestureDetector(
@@ -248,11 +543,14 @@ class _SignupPageState extends State<SignupPage> {
         prefixIcon: Icon(icon, color: cyan),
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.white70),
-        errorStyle: const TextStyle(color: Colors.redAccent),
+        errorStyle: const TextStyle(
+          color: Colors.redAccent,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.08),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: cyan.withOpacity(0.4)),
@@ -260,6 +558,14 @@ class _SignupPageState extends State<SignupPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: cyan, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 2),
         ),
       ),
     );
@@ -271,10 +577,10 @@ class _SignupPageState extends State<SignupPage> {
       obscureText: _obscurePassword,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "Password is required";
+          return "⚠️ Password is required";
         }
         if (value.length < 6) {
-          return "Password must be at least 6 characters";
+          return "⚠️ Password must be at least 6 characters";
         }
         return null;
       },
@@ -283,6 +589,11 @@ class _SignupPageState extends State<SignupPage> {
         prefixIcon: Icon(Icons.lock_outline, color: cyan),
         hintText: "Enter Password",
         hintStyle: const TextStyle(color: Colors.white70),
+        errorStyle: const TextStyle(
+          color: Colors.redAccent,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.08),
         suffixIcon: IconButton(
@@ -296,8 +607,7 @@ class _SignupPageState extends State<SignupPage> {
             });
           },
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: cyan.withOpacity(0.4)),
@@ -305,6 +615,14 @@ class _SignupPageState extends State<SignupPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: cyan, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 2),
         ),
       ),
     );
