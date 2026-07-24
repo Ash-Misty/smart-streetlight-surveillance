@@ -306,7 +306,7 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      await AuthService.register(
+      final message = await AuthService.register(
         serviceId: serviceId,
         mobileNumber: mobile,
         password: password,
@@ -315,13 +315,20 @@ class _SignupPageState extends State<SignupPage> {
       if (!mounted) return;
 
       // Show success dialog
-      showSuccessDialog('Your account has been created successfully!');
+      showSuccessDialog(message);
 
-      // Wait for user to tap OK or close dialog
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(milliseconds: 1200));
       
       if (!mounted) return;
-      Navigator.pop(context);
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(serviceId: serviceId),
+        ),
+      );
       
     } catch (e) {
       if (!mounted) return;

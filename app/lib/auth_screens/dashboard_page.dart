@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import '../services/auth_service.dart';
+import 'login_page.dart';
 
 class DashboardPage extends StatefulWidget {
   final String serviceId;
@@ -38,6 +40,67 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     serviceId = widget.serviceId;
+    _loadProfile();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    serviceIdController.dispose();
+    usernameController.dispose();
+    stationNameController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadProfile() async {
+    final profile = await AuthService.getMe().catchError((_) => null);
+
+    if (!mounted || profile == null) return;
+
+    _applyProfileData(profile);
+  }
+
+  void _applyProfileData(Map<String, dynamic> profile) {
+    setState(() {
+      name = profile['name']?.toString().isNotEmpty == true
+          ? profile['name'].toString()
+          : name;
+      email = profile['email']?.toString() ?? email;
+      phone = profile['mobileNumber']?.toString() ?? phone;
+      serviceId = profile['serviceId']?.toString() ?? serviceId;
+      username = profile['username']?.toString().isNotEmpty == true
+          ? profile['username'].toString()
+          : username;
+      stationName = profile['stationName']?.toString().isNotEmpty == true
+          ? profile['stationName'].toString()
+          : stationName;
+      location = profile['location']?.toString().isNotEmpty == true
+          ? profile['location'].toString()
+          : location;
+      imageUrl = profile['imageUrl']?.toString().isNotEmpty == true
+          ? profile['imageUrl'].toString()
+          : imageUrl;
+    });
+  }
+
+  Future<void> _saveProfileFromControllers() async {
+    final response = await AuthService.updateProfile(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phoneController.text.trim(),
+      username: usernameController.text.trim(),
+      stationName: stationNameController.text.trim(),
+      location: locationController.text.trim(),
+      imageUrl: imageUrl,
+    );
+
+    final profile = response['user'];
+    if (profile is Map<String, dynamic>) {
+      _applyProfileData(profile);
+    }
   }
 
   /// ================= GET PROFILE IMAGE =================
@@ -346,6 +409,10 @@ class _DashboardPageState extends State<DashboardPage> {
   void showSimpleEditDialog() {
     nameController.text = name;
     emailController.text = email;
+    phoneController.text = phone;
+    usernameController.text = username;
+    stationNameController.text = stationName;
+    locationController.text = location;
 
     showDialog(
       context: context,
@@ -472,13 +539,19 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ),
                         child: TextButton(
-                          onPressed: () {
-                            setState(() {
-                              name = nameController.text;
-                              email = emailController.text;
-                            });
-                            Navigator.pop(context);
-                            _showProfileUpdateSuccess();
+                          onPressed: () async {
+                            try {
+                              await _saveProfileFromControllers();
+
+                              if (!mounted) return;
+                              Navigator.pop(context);
+                              _showProfileUpdateSuccess();
+                            } catch (e) {
+                              if (!mounted) return;
+                              _showErrorDialog(
+                                e.toString().replaceAll("Exception:", "").trim(),
+                              );
+                            }
                           },
                           child: const Text(
                             "Save",
@@ -738,18 +811,19 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           child: TextButton(
-                            onPressed: () {
-                              setState(() {
-                                name = nameController.text;
-                                email = emailController.text;
-                                phone = phoneController.text;
-                                serviceId = serviceIdController.text;
-                                username = usernameController.text;
-                                stationName = stationNameController.text;
-                                location = locationController.text;
-                              });
-                              Navigator.pop(context);
-                              _showProfileUpdateSuccess();
+                            onPressed: () async {
+                              try {
+                                await _saveProfileFromControllers();
+
+                                if (!mounted) return;
+                                Navigator.pop(context);
+                                _showProfileUpdateSuccess();
+                              } catch (e) {
+                                if (!mounted) return;
+                                _showErrorDialog(
+                                  e.toString().replaceAll("Exception:", "").trim(),
+                                );
+                              }
                             },
                             child: const Text(
                               "Save",
@@ -1052,7 +1126,11 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   /// ================= PERFORM LOGOUT =================
-  void _performLogout() {
+  Future<void> _performLogout() async {
+    await AuthService.clearToken();
+
+    if (!mounted) return;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -1118,8 +1196,13 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                        (route) => false,
+                      );
                     },
                     child: const Text(
                       "OK",

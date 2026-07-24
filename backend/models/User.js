@@ -9,9 +9,9 @@ const UserSchema = mongoose.Schema(
       trim: true,
       validate: {
         validator: function (v) {
-          return /^[A-Za-z0-9 ]+$/.test(v)
+          return /^[A-Za-z0-9_]+$/.test(v)
         },
-        message: 'Service ID must be alphanumeric and can include spaces only',
+        message: 'Service ID can include letters, numbers, and underscores only',
       },
     },
   
@@ -23,6 +23,37 @@ const UserSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Please add a password'],
+    },
+    name: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      default: '',
+    },
+    username: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    stationName: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    location: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    imageUrl: {
+      type: String,
+      trim: true,
+      default: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
     },
   },
   {
